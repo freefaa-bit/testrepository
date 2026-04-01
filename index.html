@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Presentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides {
+            text-align: left;
+        }
+        .reveal .slides section {
+            padding: 20px;
+        }
+        .highlight {
+            color: #42affa;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Title -->
+            <section data-background-gradient="linear-gradient(to bottom, #283b95, #17b2c3)">
+                <h1>Demo Presentation</h1>
+                <h3>Created with Reveal.js</h3>
+                <p style="margin-top: 50px;">
+                    <small>Press <span class="highlight">Space</span> or <span class="highlight">→</span> to navigate</small>
+                </p>
+            </section>
+
+            <!-- Slide 2: About -->
+            <section>
+                <h2>Welcome! 👋</h2>
+                <p>This is a demo presentation showcasing:</p>
+                <ul>
+                    <li>Beautiful slide transitions</li>
+                    <li>Multiple slide layouts</li>
+                    <li>Easy navigation</li>
+                    <li>Responsive design</li>
+                </ul>
+            </section>
+
+            <!-- Slide 3: Features -->
+            <section>
+                <h2>Key Features</h2>
+                <ul>
+                    <li class="fragment">📱 Works on any device</li>
+                    <li class="fragment">🎨 Customizable themes</li>
+                    <li class="fragment">⌨️ Keyboard navigation</li>
+                    <li class="fragment">🖱️ Touch & mouse support</li>
+                </ul>
+            </section>
+
+            <!-- Slide 4: Vertical Slides -->
+            <section>
+                <section>
+                    <h2>Vertical Slides</h2>
+                    <p>Press <span class="highlight">↓</span> to go down</p>
+                </section>
+                <section>
+                    <h3>Nested Content</h3>
+                    <p>You can organize content vertically for related topics.</p>
+                </section>
+            </section>
+
+            <!-- Slide 5: Code Example -->
+            <section>
+                <h2>Code Highlighting</h2>
+                <pre><code data-trim data-noescape>
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet('World'));
+                </code></pre>
+            </section>
+
+            <!-- Slide 6: Thank You -->
+            <section data-background-color="#4d7c8a">
+                <h1>Thank You!</h1>
+                <p>Press <span class="highlight">ESC</span> for slide overview</p>
+                <p>Press <span class="highlight">F</span> for fullscreen</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            backgroundTransition: 'fade'
+        });
+    </script>
+</body>
+</html>
