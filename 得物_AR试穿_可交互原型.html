@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>得物 AR 试穿原型</title>
+  <style>
+    :root{
+      --mint:#35d7c8;
+      --mint-dark:#16b7a8;
+      --bg:#f4f5f7;
+      --text:#111;
+      --muted:#7a7a7a;
+      --card:#fff;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{margin:0;background:#111;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
+
+    .phone{
+      width:390px;height:844px;background:#000;border-radius:48px;padding:12px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.55);
+    }
+    .screen{
+      width:100%;height:100%;background:var(--bg);border-radius:38px;overflow:hidden;position:relative;
+    }
+    .island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:116px;height:30px;background:#000;border-radius:20px;z-index:20}
+
+    .topbar{
+      height:88px;padding:40px 16px 12px;background:linear-gradient(180deg,#3de5d5,#29d0c1);display:flex;align-items:center;justify-content:space-between;
+      color:#0a0a0a;font-weight:700;font-size:40px;
+    }
+    .brand{font-size:22px;letter-spacing:.2px}
+    .icons{display:flex;gap:14px;font-size:22px}
+
+    .card-head{
+      background:#fff;margin:0 0 0;border-bottom:1px solid #ececec;padding:14px 16px 12px;
+    }
+    .title{font-size:44px;font-weight:800;line-height:1}
+    .sub{font-size:16px;font-weight:700;margin-top:8px;line-height:1.25}
+    .meta{margin-top:8px;color:#666;font-size:14px}
+
+    .ar-zone{
+      position:relative;height:420px;background:repeating-linear-gradient(90deg,#c49b70 0,#c49b70 11%,#bc9168 11%,#bc9168 12%);
+      overflow:hidden;
+    }
+    .tag{
+      position:absolute;top:14px;left:50%;transform:translateX(-50%);padding:8px 16px;background:#e6fff9;border:2px dashed #66d9c9;border-radius:999px;color:#1f756b;font-weight:700;font-size:16px;
+    }
+
+    .foot.left{position:absolute;left:26px;bottom:62px;width:112px;height:170px;background:#f7f7f7;border-radius:56px 56px 22px 28px;transform:rotate(-16deg)}
+    .shoe{
+      position:absolute;right:52px;bottom:36px;width:160px;height:258px;background:linear-gradient(170deg,#202226,#08090a);border-radius:82px 82px 34px 34px;transform:rotate(8deg);
+      box-shadow:inset 0 -6px 20px rgba(255,255,255,.05),0 18px 24px rgba(0,0,0,.25);
+      border:2px solid rgba(0,0,0,.5);
+    }
+    .shoe::before{content:"";position:absolute;inset:-11px;border:3px dashed #67dfcf;border-radius:90px 90px 42px 42px;opacity:.8}
+    .shoe::after{content:"";position:absolute;left:18px;right:18px;top:92px;height:10px;background:rgba(255,255,255,.22);box-shadow:0 20px 0 rgba(255,255,255,.18),0 40px 0 rgba(255,255,255,.14),0 60px 0 rgba(255,255,255,.12)}
+
+    .slider{position:absolute;right:14px;top:120px;width:36px;height:190px;background:rgba(44,44,44,.35);border-radius:20px;display:flex;justify-content:center}
+    .slider .line{position:absolute;top:16px;bottom:16px;width:4px;background:#71dccc;border-radius:4px}
+    .slider .dot{position:absolute;top:110px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 1px 6px rgba(0,0,0,.3)}
+
+    .thumbs{
+      position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:10px;
+    }
+    .thumb{width:64px;height:48px;background:#fff;border-radius:10px;border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-size:12px;color:#888;font-weight:700}
+    .thumb.active{border-color:var(--mint-dark);box-shadow:0 0 0 2px #ddfaf6}
+
+    .panel{
+      position:absolute;left:0;right:0;bottom:0;background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;padding:12px 14px 76px;
+      box-shadow:0 -8px 20px rgba(0,0,0,.08);
+    }
+    .p-title{font-size:38px;font-weight:800;line-height:1.05;margin-bottom:6px}
+    .p-meta{color:#666;font-size:13px;margin-bottom:10px}
+    .cta-wrap{display:flex;flex-direction:column;gap:8px;position:absolute;right:14px;top:12px;width:160px}
+    .btn{height:44px;border-radius:10px;border:none;font-size:16px;font-weight:700}
+    .btn-main{background:linear-gradient(90deg,#2fd7c8,#18c4b4);color:#fff}
+    .btn-sub{background:#fff;color:#17b4a5;border:2px solid #7bded2}
+
+    .bottom{
+      position:absolute;left:0;right:0;bottom:0;height:72px;background:#fff;border-top:1px solid #ececec;display:flex;justify-content:space-around;align-items:center;
+      font-size:12px;color:#888;
+    }
+    .tab{display:flex;flex-direction:column;gap:4px;align-items:center}
+    .tab.active{color:#10baa9;font-weight:700}
+
+    .toast{position:absolute;top:98px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;padding:8px 12px;border-radius:999px;font-size:13px;opacity:0;transition:.22s;pointer-events:none;z-index:50}
+    .toast.show{opacity:1}
+
+    @media (max-width:420px){
+      .phone{width:100vw;height:100vh;border-radius:0;padding:0}.screen{border-radius:0}.island{top:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <div class="island"></div>
+      <div class="toast" id="toast">已切换</div>
+
+      <div class="topbar">
+        <div class="brand">得物 | Poizon</div>
+        <div class="icons">⌕ ⎋ ☰</div>
+      </div>
+
+      <div class="card-head">
+        <div class="title">AR 试穿</div>
+        <div class="sub">Nike Air Jordan 1 Low "Travis Scott Black Phantom"</div>
+        <div class="meta">¥3299 | 100+ 人正在购买 | 全球领先潮流鉴别</div>
+      </div>
+
+      <div class="ar-zone">
+        <div class="tag" id="tag">AR试穿中</div>
+        <div class="foot left"></div>
+        <div class="shoe" id="shoe"></div>
+        <div class="slider" id="slider"><div class="line"></div><div class="dot" id="dot"></div></div>
+        <div class="thumbs">
+          <button class="thumb" data-color="white">白色</button>
+          <button class="thumb active" data-color="black">黑色</button>
+          <button class="thumb" data-color="red">红色</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="p-title">Nike Air Jordan 1 Low 'Travis Scott Black Phantom'</div>
+        <div class="p-meta">得物 · 100+ 人正在购买 | 全球领先</div>
+        <div class="cta-wrap">
+          <button class="btn btn-main" id="btnAr">AR试穿</button>
+          <button class="btn btn-sub">鉴别保障</button>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="tab active">🏠<span>得物</span></div>
+        <div class="tab">💬<span>社区</span></div>
+        <div class="tab">🛒<span>购买</span></div>
+        <div class="tab">▦<span>服务</span></div>
+        <div class="tab">👤<span>我</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const shoe = document.getElementById('shoe');
+    const thumbs = document.querySelectorAll('.thumb');
+    const toast = document.getElementById('toast');
+    const tag = document.getElementById('tag');
+    const btnAr = document.getElementById('btnAr');
+    const dot = document.getElementById('dot');
+    const slider = document.getElementById('slider');
+
+    const colorMap = {
+      black: 'linear-gradient(170deg,#202226,#08090a)',
+      white: 'linear-gradient(170deg,#f4f4f4,#dcdcdc)',
+      red: 'linear-gradient(170deg,#7a0f16,#3f080b)'
+    };
+
+    function showToast(text){
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(window.__t);
+      window.__t = setTimeout(()=>toast.classList.remove('show'), 900);
+    }
+
+    thumbs.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        thumbs.forEach(x=>x.classList.remove('active'));
+        btn.classList.add('active');
+        const color = btn.dataset.color;
+        shoe.style.background = colorMap[color];
+        showToast('已切换到' + (color==='black'?'黑色':color==='white'?'白色':'红色'));
+      })
+    });
+
+    let arOn = true;
+    btnAr.addEventListener('click',()=>{
+      arOn = !arOn;
+      tag.textContent = arOn ? 'AR试穿中' : 'AR已暂停';
+      tag.style.background = arOn ? '#e6fff9' : '#fff4e6';
+      tag.style.borderColor = arOn ? '#66d9c9' : '#f0b36a';
+      tag.style.color = arOn ? '#1f756b' : '#9a5b10';
+      showToast(arOn ? 'AR已开启' : 'AR已暂停');
+    });
+
+    let dragging = false;
+    slider.addEventListener('pointerdown', e => { dragging = true; slider.setPointerCapture(e.pointerId); });
+    slider.addEventListener('pointerup', () => dragging = false);
+    slider.addEventListener('pointermove', e => {
+      if(!dragging) return;
+      const rect = slider.getBoundingClientRect();
+      let y = e.clientY - rect.top;
+      y = Math.max(14, Math.min(rect.height - 14, y));
+      dot.style.top = (y - 11) + 'px';
+      const rate = 1 - (y / rect.height);
+      shoe.style.transform = `rotate(${4 + rate*8}deg)`;
+    });
+  </script>
+</body>
+</html>
